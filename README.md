@@ -17,7 +17,7 @@ Authors: Haofei Zhang, Feng Mao, Mengqi Xue, Gongfan Fang, Zunlei Feng, Jie Song
 
 ### 2. Prepare cv-lib-PyTorch
 
-Our code requires [cv-lib-PyTorch](https://github.com/zhfeing/cv-lib-PyTorch/tree/bootstrapping_vits). You should download this repo and checkout to tag `KA-DETR`.
+Our code requires [cv-lib-PyTorch](https://github.com/zhfeing/cv-lib-PyTorch/tree/KA-DETR). You should download this repo and checkout to tag `KA-DETR`.
 > `cv-lib-PyTorch` is an open source repo currently maintained by me.
 
 ### 3. Train teachers
