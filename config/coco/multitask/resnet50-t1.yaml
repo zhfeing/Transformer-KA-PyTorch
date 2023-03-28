@@ -1,0 +1,73 @@
+dataset:
+  name: COCO_large
+  root: ~/datasets/MS-COCO-2017
+  train:
+    split: train
+  val:
+    split: val
+    keep_crowd: true
+  resize: null
+  make_partial:
+    [
+       0,  1,  2,  3,  4,  9, 10, 14, 15, 16, 17, 18, 24, 25, 26, 29, 30, 31, 32, 33,
+      39, 40, 41, 46, 47, 48, 49, 50, 56, 57, 58, 62, 63, 64, 68, 69, 70, 73, 74, 75
+    ]
+  fast_record_fp: ~/datasets/MS-COCO-2017/task_1_{split}.pkl
+
+training:
+  optimizer:
+    name: AdamW
+    lr: 1.0e-4
+    weight_decay: 1.0e-4
+  lr_backbone: 1.0e-5
+  freeze_backbone: false
+  lr_schedule:
+    name: multi_step
+    milestones: [100]
+    gamma: 0.1
+  train_epochs: 150
+  print_interval: 50
+  val_interval: 1500
+  batch_size: 32
+  num_workers: 8
+  sync_bn: False
+  clip_max_norm: 0.1
+
+validation:
+  batch_size: 32
+  num_workers: 8
+
+model:
+  backbone:
+    backbone_name: resnet50
+    train_backbone: true
+    dilation: false
+  position_encoding:
+    name: sine
+  transformer:
+    embed_dim: 256
+    num_heads: 8
+    num_encoder_layers: 6
+    num_decoder_layers: 6
+    dim_feedforward: 2048
+    dropout: 0.1
+    activation: relu
+    return_intermediate_dec: true
+    pre_norm: true
+  detr:
+    num_queries: 100
+    aux_loss: true
+  pre_train: run/coco-pretrain/detr-resnet50/ckpt/up-detr-pre-training-60ep-imagenet.pth
+
+loss:
+  matcher:
+    cost_class: 1.0
+    cost_bbox: 5.0
+    cost_giou: 2.0
+  set_criterion:
+    eos_coef: 0.1
+    loss_items: [labels, boxes, cardinality]
+  weight_dict:
+    loss_ce: 1.0
+    loss_bbox: 5.0
+    loss_giou: 2.0
